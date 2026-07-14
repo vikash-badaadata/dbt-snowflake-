@@ -1,0 +1,33 @@
+# .github/workflows/semantic-risk.yml
+name: Semantic Risk
+on: pull_request
+permissions:
+  contents: read
+  pull-requests: write   # required — the action posts the verdict as a PR comment
+jobs:
+  risk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # required — the action diffs against the PR's base branch
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install dbt-snowflake   # swap for your warehouse adapter
+
+      - uses: badaadata/semantic-risk-engine-action@v1
+        continue-on-error: true   # shadow mode — an API hiccup must never fail your build
+        with:
+          api_key: ${{ secrets.SEMANTIC_RISK_API_KEY }}
+        env:
+          # your existing warehouse credentials — stay on your runner, never sent to our API
+          DBT_SNOWFLAKE_ACCOUNT:   ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          DBT_SNOWFLAKE_USER:      ${{ secrets.SNOWFLAKE_USER }}
+          DBT_SNOWFLAKE_PASSWORD:  ${{ secrets.SNOWFLAKE_PASSWORD }}
+          DBT_SNOWFLAKE_DATABASE:  ${{ secrets.SNOWFLAKE_DATABASE }}
+          DBT_SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          DBT_SNOWFLAKE_SCHEMA:    ${{ secrets.SNOWFLAKE_SCHEMA }}
+          

@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: raw
+    tables:
+      - name: orders
+        description: "Raw orders table from Snowflake"
+      - name: customers
+        description: "Raw customers table from Snowflake"
+
+models:
+  - name: stg_orders
+    description: "Stage raw orders data for analytical use"
+    columns:
+      - name: order_id
+        description: "Order identifier"
+      - name: customer_id
+        description: "Customer identifier"
+      - name: amount
+        description: "Order amount"
+  - name: stg_customers
+    description: "Stage raw customer data for analytical use"
+    columns:
+      - name: customer_id
+        description: "Customer identifier"
+      - name: customer_name
+        description: "Customer display name"
+  - name: orders_summary
+    description: "Aggregate order metrics per customer"
+    columns:
+      - name: customer_id
+        description: "Customer identifier"
+      - name: order_count
+        description: "Total number of orders per customer"
+      - name: total_amount
+        description: "Total order amount per customer"
