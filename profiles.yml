@@ -3,12 +3,12 @@ dbt_snowflake_profile:
   outputs:
     dev:
       type: snowflake
-      account: your_account
-      user: your_user
-      password: your_password
-      role: SYSADMIN
-      database: YOUR_DATABASE
-      warehouse: YOUR_WAREHOUSE
-      schema: ANALYTICS
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE', 'SYSADMIN') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+      schema: "{{ env_var('DBT_SNOWFLAKE_SCHEMA') }}"
       threads: 1
       client_session_keep_alive: false
